@@ -1,0 +1,35 @@
+image:
+  repository: narasi17/frappe-hrms
+  tag: v15.21.1
+  pullPolicy: IfNotPresent
+
+persistence:
+   worker:
+     storageClass: "nfs"
+
+jobs:
+  createSite:
+    enabled: true
+    siteName: "erp.internal.v3analytics.in"
+    adminPassword: "Admin@123"
+    installApps:
+    - "erpnext"
+    - "hrms"
+
+ingress:
+  enabled: true
+  ingressName: "erp-v3-ingress"
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/tls-acme: "true"
+  hosts:
+  - host: erp.internal.v3analytics.in
+    paths:
+    - path: /
+      pathType: ImplementationSpecific
+  tls:
+   - secretName: erp-internal-tls
+     hosts:
+       - erp.internal.v3analytics.in
+~                                       
